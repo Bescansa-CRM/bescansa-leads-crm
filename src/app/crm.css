@@ -83,7 +83,10 @@
    llenar ese espacio — así la barra siempre cae justo en el borde inferior de la ventana. Solo en
    escritorio: en pantallas angostas el kit ya apila todo en una sola columna con scroll normal. */
 @media (min-width: 901px) {
-  .admin-content:has(.kanban) { display: flex; flex-direction: column; height: calc(100vh - 72px); overflow: hidden; }
+  .admin-content:has(.kanban) {
+    display: flex; flex-direction: column; height: calc(100vh - 72px); overflow: hidden;
+    max-width: none; /* el kit centra el contenido a 1500px (bueno para texto); el tablero aprovecha toda la pantalla */
+  }
   .admin-content:has(.kanban) .page-heading, .admin-content:has(.kanban) .filters { flex: none; }
   .kanban { flex: 1; min-height: 0; }
 }
