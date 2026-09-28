@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
 import { moveStageAction } from "@/app/actions";
-import { ETAPAS, ETAPA_LABEL, ETAPA_TONE, MOTIVOS_PERDIDA, type Etapa } from "@/lib/data/types";
+import { ETAPAS, ETAPA_LABEL, KANBAN_TONE, MOTIVOS_PERDIDA, type Etapa } from "@/lib/data/types";
 
 export interface CardData {
   id: string;
@@ -59,7 +59,7 @@ export function KanbanBoard({ cards }: { cards: CardData[] }) {
             <section
               key={etapa}
               className={`kanban-col${over === etapa ? " is-over" : ""}`}
-              data-tone={ETAPA_TONE[etapa]}
+              data-tone={KANBAN_TONE[etapa]}
               onDragOver={(e) => { e.preventDefault(); setOver(etapa); }}
               onDragLeave={() => setOver((o) => (o === etapa ? null : o))}
               onDrop={(e) => onDrop(e, etapa)}

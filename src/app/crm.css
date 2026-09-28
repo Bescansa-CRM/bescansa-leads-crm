@@ -2,22 +2,69 @@
 .avatar-sm { width: 24px; height: 24px; font-size: 10px; flex: none; }
 .avatar-empty { background: var(--line); color: var(--muted); }
 
+/* Panel lateral siempre plegado (a pedido): una franja angosta con solo íconos, para que el tablero
+   tenga todo el ancho posible. El nombre de cada sección queda como tooltip (title) y para lectores
+   de pantalla (sidebar-link-label sigue en el DOM, solo se oculta visualmente). */
+/* Solo en escritorio: por debajo de los 900px el kit apila el panel arriba del contenido (ver components.css), y eso se respeta. */
+@media (min-width: 901px) {
+  .admin-grid.sidebar-collapsed { grid-template-columns: 76px 1fr; }
+}
+.sidebar-collapsed .sidebar {
+  width: 76px; padding: 18px 10px; align-items: center;
+  border-right: 1px solid rgba(255, 255, 255, .08); /* línea apenas visible: marca dónde termina el panel */
+}
+.sidebar-collapsed .brand { max-width: 40px; padding: 6px; border-radius: 10px; }
+.sidebar-collapsed .sidebar-nav { margin-top: 28px; width: 100%; }
+.sidebar-collapsed .sidebar-link { justify-content: center; padding: 9px; gap: 0; }
+.sidebar-collapsed .sidebar-group-label, .sidebar-collapsed .sidebar-link-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.sidebar-collapsed .sidebar-group { justify-items: center; }
+.sidebar-collapsed .sidebar-foot { width: 100%; padding: 14px 4px 2px; display: grid; justify-items: center; }
+.sidebar-collapsed .sidebar-user { flex-direction: column; gap: 4px; }
+.sidebar-collapsed .sidebar-user-info { display: none; } /* el nombre/correo queda como aria-label + title (tooltip) */
+.sidebar-collapsed .sidebar-logout { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: 15px; }
+
 /* Tablero */
-.kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 12px; align-items: start; }
+/* Dos tonos propios del CRM (no están en el kit de marca: se copian a src/app/tokens.css, fuente única
+   compartida con bescansa-app, así que no se tocan). Hacen falta porque el tablero tiene 8 fases y el kit
+   solo define 6 tonos semánticos; "blue" y "rose" cubren las 2 que si no compartirían color con otra.
+   Se derivan con color-mix, igual que --brand-soft etc., así que el modo oscuro los ajusta solos. */
+:root {
+  --stage-blue: #3568c9;
+  --stage-blue-soft: color-mix(in srgb, var(--stage-blue) 16%, var(--white));
+  --stage-rose: #ab3e83;
+  --stage-rose-soft: color-mix(in srgb, var(--stage-rose) 16%, var(--white));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --stage-blue: #8fb4f5; --stage-rose: #e58fc4; }
+}
+:root[data-theme="dark"] { --stage-blue: #8fb4f5; --stage-rose: #e58fc4; }
+
+.kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; padding-bottom: 4px; align-items: start; overflow-x: scroll; scrollbar-width: auto; scrollbar-color: var(--muted) var(--canvas); }
+/* "scroll" en vez de "auto": la barra queda siempre reservada y visible, no aparece solo al pasar el mouse. */
+.kanban::-webkit-scrollbar { height: 12px; }
+.kanban::-webkit-scrollbar-track { background: var(--canvas); border-radius: 999px; }
+.kanban::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 55%, var(--canvas)); border-radius: 999px; border: 2px solid var(--canvas); }
+.kanban::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 .kanban-col { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-card); min-height: 120px; overflow: hidden; transition: border-color var(--motion-fast) var(--motion-ease), background var(--motion-fast) var(--motion-ease); }
 .kanban-col.is-over { border-color: var(--brand); background: var(--brand-soft); }
-/* Identidad de columna: mismos 6 tonos semánticos del design kit, ninguno nuevo (ver ETAPA_TONE). */
-.kanban-col[data-tone="brand"] { --tone: var(--brand); }
+/* Identidad de columna: una por fase (8), para diferenciarlas de un vistazo. Ver KANBAN_TONE. */
+.kanban-col[data-tone="brand"] { --tone: var(--brand-action-dark, var(--brand-dark)); }
 .kanban-col[data-tone="neutral"] { --tone: var(--status-neutral); }
+.kanban-col[data-tone="blue"] { --tone: var(--stage-blue); }
 .kanban-col[data-tone="info"] { --tone: var(--status-info); }
 .kanban-col[data-tone="warning"] { --tone: var(--status-warning); }
+.kanban-col[data-tone="rose"] { --tone: var(--stage-rose); }
 .kanban-col[data-tone="good"] { --tone: var(--status-good); }
 .kanban-col[data-tone="critical"] { --tone: var(--status-critical); }
 .kanban-col[data-tone] { border-top: 3px solid var(--tone); }
-.kanban-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; font-family: var(--font-display); background: color-mix(in srgb, var(--tone, var(--line)) 8%, var(--canvas)); }
-.kanban-head strong { display: flex; align-items: center; gap: 7px; }
-.kanban-head strong::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--tone, var(--muted)); flex: none; }
-.kanban-count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+.kanban-head {
+  display: flex; justify-content: space-between; align-items: center; padding: 10px 12px;
+  font-family: var(--font-display); color: var(--tone, var(--ink));
+  background: color-mix(in srgb, var(--tone, var(--line)) 14%, var(--white));
+}
+.kanban-head strong { display: flex; align-items: center; gap: 7px; color: inherit; }
+.kanban-head strong::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.kanban-count { font-variant-numeric: tabular-nums; color: inherit; opacity: .8; font-size: 13px; font-weight: 600; }
 .kanban-list { display: grid; gap: 8px; padding: 0 8px 10px; max-height: calc(100vh - 300px); overflow-y: auto; }
 .kanban-card { display: block; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-control); padding: 10px 12px; color: var(--ink); text-decoration: none; box-shadow: var(--shadow-card); cursor: grab; }
 .kanban-card:hover { border-color: var(--brand); }

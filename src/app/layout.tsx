@@ -10,7 +10,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    // suppressHydrationWarning: theme.js (abajo) fija data-theme antes de que React hidrate, para no
+    // mostrar el tema equivocado un instante. Ese cambio de atributo es intencional; sin este aviso,
+    // React marca un "mismatch" en cada carga aunque no haya ningún problema real.
+    <html lang="es" suppressHydrationWarning>
       <head>
         {/* Antes de pintar: aplica el tema guardado (si el usuario eligió uno a mano) para no mostrar el tema equivocado un instante. */}
         <Script src="/theme.js" strategy="beforeInteractive" />

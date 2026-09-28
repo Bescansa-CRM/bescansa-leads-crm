@@ -8,10 +8,11 @@ export const dynamic = "force-dynamic";
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const { repo, user: me } = await getContext();
   return (
-    <div className="admin-grid">
-      <aside className="sidebar">
+    <div className="admin-grid sidebar-collapsed">
+      <aside className="sidebar" aria-label="Navegación">
+        {/* Panel siempre plegado (a pedido): isotipo en vez del logo con texto, íconos con tooltip. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <div className="brand"><img src="/brand/bescansa-logo-color.png" alt="Estudio Bescansa" /></div>
+        <div className="brand" title="Estudio Bescansa"><img src="/brand/bescansa-isotipo-color.png" alt="Estudio Bescansa" /></div>
         <nav className="sidebar-nav" aria-label="Principal">
           <div className="sidebar-group">
             <NavLink href="/" icon="◧" exact>Hoy</NavLink>
@@ -22,15 +23,23 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </div>
           <div className="sidebar-group">
             <div className="sidebar-group-label">Próximamente</div>
-            <span className="sidebar-link" aria-disabled="true" style={{ opacity: 0.45, cursor: "default" }}><span className="nav-icon">⇪</span>Importar</span>
+            <span className="sidebar-link" aria-disabled="true" title="Importar (próximamente)" style={{ opacity: 0.45, cursor: "default" }}>
+              <span className="nav-icon">⇪</span><span className="sidebar-link-label">Importar</span>
+            </span>
           </div>
         </nav>
         <div className="sidebar-foot">
-          <div className="sidebar-user">
+          <div className="sidebar-user" title={`${me.nombre} · ${me.email}`} aria-label={`${me.nombre} · ${me.email}`}>
             <span className="avatar">{me.nombre.slice(0, 2).toUpperCase()}</span>
-            <div><strong>{me.nombre}</strong><span>{me.email}</span></div>
+            <div className="sidebar-user-info"><strong>{me.nombre}</strong><span>{me.email}</span></div>
           </div>
-          {repo.mode === "supabase" && <form action={logoutAction}><button className="btn btn-tertiary btn-small" type="submit" style={{ marginTop: 8 }}>Salir</button></form>}
+          {repo.mode === "supabase" && (
+            <form action={logoutAction}>
+              <button className="btn btn-tertiary btn-small sidebar-logout" type="submit" title="Salir" aria-label="Salir" style={{ marginTop: 8 }}>
+                <span aria-hidden="true">←</span><span className="sidebar-link-label">Salir</span>
+              </button>
+            </form>
+          )}
         </div>
       </aside>
       <main className="admin-main">

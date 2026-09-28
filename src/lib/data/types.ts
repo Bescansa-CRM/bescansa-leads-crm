@@ -25,6 +25,24 @@ export const ETAPA_TONE: Record<Etapa, "brand" | "neutral" | "info" | "warning" 
   perdido: "critical",
 };
 
+/**
+ * Identidad de color del tablero: una por cada una de las 8 fases, para distinguirlas de un vistazo.
+ * Reutiliza los 6 tonos semánticos del kit donde corresponde (ganado=éxito, perdido=crítico…) y suma
+ * "blue" y "rose" — dos tonos propios del CRM, definidos en crm.css, no en el kit de marca compartido —
+ * para las dos fases que si no quedarían con el mismo color que otra. Solo se usa en el tablero;
+ * ETAPA_TONE/ETAPA_BADGE (listas y fichas) no cambian.
+ */
+export const KANBAN_TONE: Record<Etapa, "brand" | "neutral" | "blue" | "info" | "warning" | "rose" | "good" | "critical"> = {
+  nuevo: "brand",
+  contactado: "neutral",
+  calificado: "blue",
+  visita: "info",
+  propuesta: "warning",
+  negociacion: "rose",
+  ganado: "good",
+  perdido: "critical",
+};
+
 export const ETAPA_BADGE: Record<Etapa, string> = {
   nuevo: `badge-${ETAPA_TONE.nuevo}`,
   contactado: `badge-${ETAPA_TONE.contactado}`,
