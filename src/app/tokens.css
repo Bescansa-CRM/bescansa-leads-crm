@@ -4,17 +4,14 @@
   --line: #dfe6e7;
   --canvas: #f4f7f7;
   --white: #ffffff;
+  --surface-sunken: #f6f9f9;
   --brand: #5db1bd;
   --brand-dark: #347f89;
   --brand-action: var(--brand);
   --brand-action-dark: var(--brand-dark);
-  --brand-soft: #e6f4f5;
   --success: #2f8b67;
   --warning: #b97924;
   --danger: #a94b4b;
-  --success-soft: #e7f5ee;
-  --warning-soft: #fdf1dc;
-  --danger-soft: #fae7e4;
   --status-good: #0b8f54;
   --status-warning: #b8790f;
   --status-critical: #d03b3b;
@@ -26,10 +23,83 @@
   --status-error: var(--status-critical);
   --status-blocked: var(--status-critical);
   --status-information: var(--status-info);
+  /* Fondos suaves derivados, no hex fijo: heredan el tema automáticamente. */
+  --brand-soft: color-mix(in srgb, var(--brand) 14%, var(--white));
+  --success-soft: color-mix(in srgb, var(--success) 14%, var(--white));
+  --warning-soft: color-mix(in srgb, var(--warning) 14%, var(--white));
+  --danger-soft: color-mix(in srgb, var(--danger) 14%, var(--white));
   --radius-card: 12px;
   --radius-control: 8px;
   --shadow-card: 0 1px 2px rgba(17, 19, 20, 0.04), 0 4px 12px rgba(17, 19, 20, 0.05);
   --motion-fast: 120ms;
   --motion-base: 200ms;
   --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Paleta oscura — valores base, activados más abajo. No usar estas
+     variables --dark-* directamente: son la fuente de los tokens de
+     arriba cuando el tema es oscuro. */
+  --dark-ink: #eef1f1;
+  --dark-muted: #9aa8ab;
+  --dark-line: #2c3437;
+  --dark-canvas: #14181a;
+  --dark-white: #1c2225;
+  --dark-surface-sunken: #242b2e;
+  --dark-brand: #6fc4cf;
+  /* Más claro que --dark-brand a propósito: en oscuro el texto/enlace
+     necesita más luminosidad que el acento base para tener contraste,
+     al revés que en claro (donde --brand-dark es más oscuro que --brand). */
+  --dark-brand-dark: #9ddce3;
+  --dark-success: #35b57e;
+  --dark-warning: #dba24a;
+  --dark-danger: #d97a72;
+  --dark-status-good: #33c481;
+  --dark-status-warning: #e2ab3f;
+  --dark-status-critical: #ef6e63;
+  --dark-status-neutral: #9aa8ab;
+  --dark-status-info: #ab93e8;
+  --dark-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* Sigue la preferencia del sistema, salvo que se haya elegido un tema a mano (ver theme.js). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: var(--dark-ink);
+    --muted: var(--dark-muted);
+    --line: var(--dark-line);
+    --canvas: var(--dark-canvas);
+    --white: var(--dark-white);
+    --surface-sunken: var(--dark-surface-sunken);
+    --brand: var(--dark-brand);
+    --brand-dark: var(--dark-brand-dark);
+    --success: var(--dark-success);
+    --warning: var(--dark-warning);
+    --danger: var(--dark-danger);
+    --status-good: var(--dark-status-good);
+    --status-warning: var(--dark-status-warning);
+    --status-critical: var(--dark-status-critical);
+    --status-neutral: var(--dark-status-neutral);
+    --status-info: var(--dark-status-info);
+    --shadow-card: var(--dark-shadow-card);
+  }
+}
+
+/* Elegido a mano vía theme.js (toggle), sin importar el sistema. */
+:root[data-theme="dark"] {
+  --ink: var(--dark-ink);
+  --muted: var(--dark-muted);
+  --line: var(--dark-line);
+  --canvas: var(--dark-canvas);
+  --white: var(--dark-white);
+  --surface-sunken: var(--dark-surface-sunken);
+  --brand: var(--dark-brand);
+  --brand-dark: var(--dark-brand-dark);
+  --success: var(--dark-success);
+  --warning: var(--dark-warning);
+  --danger: var(--dark-danger);
+  --status-good: var(--dark-status-good);
+  --status-warning: var(--dark-status-warning);
+  --status-critical: var(--dark-status-critical);
+  --status-neutral: var(--dark-status-neutral);
+  --status-info: var(--dark-status-info);
+  --shadow-card: var(--dark-shadow-card);
 }

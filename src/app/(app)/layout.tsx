@@ -1,4 +1,5 @@
 import { NavLink } from "@/components/NavLink";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { logoutAction } from "@/app/login/actions";
 import { getContext } from "@/lib/data/repo";
 
@@ -35,6 +36,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <main className="admin-main">
         <header className="admin-topbar">
           <div className="topbar-title"><strong>CRM de leads</strong><span>Estudio Bescansa · captación y ventas</span></div>
+          <ThemeToggle />
           {repo.mode === "demo" && <span className="environment-pill demo-pill" title="Datos ficticios en memoria: no se guarda nada">Modo demostración</span>}
         </header>
         <div className="admin-content">{children}</div>
