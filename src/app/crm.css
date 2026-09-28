@@ -2,26 +2,63 @@
 .avatar-sm { width: 24px; height: 24px; font-size: 10px; flex: none; }
 .avatar-empty { background: var(--line); color: var(--muted); }
 
-/* Panel lateral siempre plegado (a pedido): una franja angosta con solo íconos, para que el tablero
-   tenga todo el ancho posible. El nombre de cada sección queda como tooltip (title) y para lectores
-   de pantalla (sidebar-link-label sigue en el DOM, solo se oculta visualmente). */
-/* Solo en escritorio: por debajo de los 900px el kit apila el panel arriba del contenido (ver components.css), y eso se respeta. */
+/* Panel lateral "auto-hide": angosto (solo íconos) en reposo; al pasar el mouse, o al llegar con el
+   teclado (Tab), se despliega igual al panel original y tapa el borde del contenido; al salir, se
+   vuelve a plegar. La franja angosta reserva 76px en la grilla siempre (no empuja el contenido al
+   desplegarse: el panel expandido se dibuja encima, con sombra). Solo en escritorio: por debajo de los
+   900px el kit apila el panel arriba del contenido (ver components.css), y eso se respeta tal cual. */
 @media (min-width: 901px) {
   .admin-grid.sidebar-collapsed { grid-template-columns: 76px 1fr; }
+
+  .sidebar-collapsed .sidebar {
+    position: sticky; z-index: 40; width: 76px; padding: 18px 10px; align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, .08); /* línea apenas visible: marca dónde termina el panel */
+    transition: width var(--motion-base) var(--motion-ease), box-shadow var(--motion-base) var(--motion-ease);
+  }
+  .sidebar-collapsed .sidebar:hover, .sidebar-collapsed .sidebar:focus-within {
+    width: 250px; align-items: stretch; box-shadow: 14px 0 32px rgba(0, 0, 0, .22);
+  }
+
+  .sidebar-collapsed .brand { max-width: 40px; padding: 6px; border-radius: 10px; transition: max-width var(--motion-base) var(--motion-ease); }
+  .sidebar-collapsed .sidebar:hover .brand, .sidebar-collapsed .sidebar:focus-within .brand { max-width: 198px; padding: 8px 10px; border-radius: 8px; }
+  .brand-full { display: none; }
+  .sidebar-collapsed .sidebar:hover .brand-compact, .sidebar-collapsed .sidebar:focus-within .brand-compact { display: none; }
+  .sidebar-collapsed .sidebar:hover .brand-full, .sidebar-collapsed .sidebar:focus-within .brand-full { display: block; }
+
+  .sidebar-collapsed .sidebar-nav { margin-top: 28px; width: 100%; }
+  .sidebar-collapsed .sidebar:hover .sidebar-nav, .sidebar-collapsed .sidebar:focus-within .sidebar-nav { margin-top: 42px; }
+
+  .sidebar-collapsed .sidebar-link { justify-content: center; padding: 9px; gap: 0; }
+  .sidebar-collapsed .sidebar:hover .sidebar-link, .sidebar-collapsed .sidebar:focus-within .sidebar-link { justify-content: flex-start; padding: 11px 12px; gap: 11px; }
+
+  .sidebar-collapsed .sidebar-group-label, .sidebar-collapsed .sidebar-link-label {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .sidebar-collapsed .sidebar:hover .sidebar-group-label, .sidebar-collapsed .sidebar:focus-within .sidebar-group-label,
+  .sidebar-collapsed .sidebar:hover .sidebar-link-label, .sidebar-collapsed .sidebar:focus-within .sidebar-link-label {
+    position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: nowrap;
+  }
+
+  .sidebar-collapsed .sidebar-group { justify-items: center; }
+  .sidebar-collapsed .sidebar:hover .sidebar-group, .sidebar-collapsed .sidebar:focus-within .sidebar-group { justify-items: stretch; }
+
+  .sidebar-collapsed .sidebar-foot { width: 100%; padding: 14px 4px 2px; display: grid; justify-items: center; }
+  .sidebar-collapsed .sidebar:hover .sidebar-foot, .sidebar-collapsed .sidebar:focus-within .sidebar-foot { display: block; padding: 16px 12px 2px; }
+
+  .sidebar-collapsed .sidebar-user { flex-direction: column; gap: 4px; }
+  .sidebar-collapsed .sidebar:hover .sidebar-user, .sidebar-collapsed .sidebar:focus-within .sidebar-user { flex-direction: row; gap: 10px; }
+
+  .sidebar-collapsed .sidebar-user-info { display: none; } /* colapsado: el nombre/correo queda como aria-label + title (tooltip) */
+  .sidebar-collapsed .sidebar:hover .sidebar-user-info, .sidebar-collapsed .sidebar:focus-within .sidebar-user-info { display: block; }
+
+  .sidebar-collapsed .sidebar-logout { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: 15px; }
+  .sidebar-collapsed .sidebar:hover .sidebar-logout, .sidebar-collapsed .sidebar:focus-within .sidebar-logout {
+    width: auto; height: auto; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: var(--radius-control); font-size: inherit;
+  }
 }
-.sidebar-collapsed .sidebar {
-  width: 76px; padding: 18px 10px; align-items: center;
-  border-right: 1px solid rgba(255, 255, 255, .08); /* línea apenas visible: marca dónde termina el panel */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-collapsed .sidebar, .sidebar-collapsed .brand { transition: none; }
 }
-.sidebar-collapsed .brand { max-width: 40px; padding: 6px; border-radius: 10px; }
-.sidebar-collapsed .sidebar-nav { margin-top: 28px; width: 100%; }
-.sidebar-collapsed .sidebar-link { justify-content: center; padding: 9px; gap: 0; }
-.sidebar-collapsed .sidebar-group-label, .sidebar-collapsed .sidebar-link-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.sidebar-collapsed .sidebar-group { justify-items: center; }
-.sidebar-collapsed .sidebar-foot { width: 100%; padding: 14px 4px 2px; display: grid; justify-items: center; }
-.sidebar-collapsed .sidebar-user { flex-direction: column; gap: 4px; }
-.sidebar-collapsed .sidebar-user-info { display: none; } /* el nombre/correo queda como aria-label + title (tooltip) */
-.sidebar-collapsed .sidebar-logout { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: 15px; }
 
 /* Tablero */
 /* Dos tonos propios del CRM (no están en el kit de marca: se copian a src/app/tokens.css, fuente única

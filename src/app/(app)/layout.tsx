@@ -10,9 +10,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="admin-grid sidebar-collapsed">
       <aside className="sidebar" aria-label="Navegación">
-        {/* Panel siempre plegado (a pedido): isotipo en vez del logo con texto, íconos con tooltip. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <div className="brand" title="Estudio Bescansa"><img src="/brand/bescansa-isotipo-color.png" alt="Estudio Bescansa" /></div>
+        {/* Panel plegado a íconos; al pasar el mouse (o llegar con el teclado) se despliega completo,
+            como el panel original, y se repliega al salir — ver ".sidebar-collapsed .sidebar:hover" en crm.css. */}
+        <div className="brand" title="Estudio Bescansa" aria-label="Estudio Bescansa">
+          {/* Dos imágenes (isotipo/logo completo), una visible por vez según ancho del panel — ver crm.css. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="brand-compact" src="/brand/bescansa-isotipo-color.png" alt="" aria-hidden="true" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="brand-full" src="/brand/bescansa-logo-color.png" alt="" aria-hidden="true" />
+        </div>
         <nav className="sidebar-nav" aria-label="Principal">
           <div className="sidebar-group">
             <NavLink href="/" icon="◧" exact>Hoy</NavLink>
