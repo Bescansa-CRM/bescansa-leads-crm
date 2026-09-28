@@ -39,13 +39,24 @@
 }
 :root[data-theme="dark"] { --stage-blue: #8fb4f5; --stage-rose: #e58fc4; }
 
-.kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; padding-bottom: 4px; align-items: start; overflow-x: scroll; scrollbar-width: auto; scrollbar-color: var(--muted) var(--canvas); }
+/* La barra de desplazamiento del tablero tiene que quedar siempre a la vista, sin bajar la página para
+   encontrarla. Para eso, en vez de dejar que la columna crezca con el contenido (y empujar la barra
+   fuera de la pantalla en monitores más bajos), la sección que contiene el tablero ocupa exactamente
+   el alto que queda debajo del encabezado (72px, fijo en el kit) y el propio .kanban se estira para
+   llenar ese espacio — así la barra siempre cae justo en el borde inferior de la ventana. Solo en
+   escritorio: en pantallas angostas el kit ya apila todo en una sola columna con scroll normal. */
+@media (min-width: 901px) {
+  .admin-content:has(.kanban) { display: flex; flex-direction: column; height: calc(100vh - 72px); overflow: hidden; }
+  .admin-content:has(.kanban) .page-heading, .admin-content:has(.kanban) .filters { flex: none; }
+  .kanban { flex: 1; min-height: 0; }
+}
+.kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; padding-bottom: 4px; overflow-x: scroll; scrollbar-width: auto; scrollbar-color: var(--muted) var(--canvas); }
 /* "scroll" en vez de "auto": la barra queda siempre reservada y visible, no aparece solo al pasar el mouse. */
 .kanban::-webkit-scrollbar { height: 12px; }
 .kanban::-webkit-scrollbar-track { background: var(--canvas); border-radius: 999px; }
 .kanban::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 55%, var(--canvas)); border-radius: 999px; border: 2px solid var(--canvas); }
 .kanban::-webkit-scrollbar-thumb:hover { background: var(--muted); }
-.kanban-col { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-card); min-height: 120px; overflow: hidden; transition: border-color var(--motion-fast) var(--motion-ease), background var(--motion-fast) var(--motion-ease); }
+.kanban-col { display: flex; flex-direction: column; background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-card); min-height: 120px; overflow: hidden; transition: border-color var(--motion-fast) var(--motion-ease), background var(--motion-fast) var(--motion-ease); }
 .kanban-col.is-over { border-color: var(--brand); background: var(--brand-soft); }
 /* Identidad de columna: una por fase (8), para diferenciarlas de un vistazo. Ver KANBAN_TONE. */
 .kanban-col[data-tone="brand"] { --tone: var(--brand-action-dark, var(--brand-dark)); }
@@ -65,7 +76,7 @@
 .kanban-head strong { display: flex; align-items: center; gap: 7px; color: inherit; }
 .kanban-head strong::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
 .kanban-count { font-variant-numeric: tabular-nums; color: inherit; opacity: .8; font-size: 13px; font-weight: 600; }
-.kanban-list { display: grid; gap: 8px; padding: 0 8px 10px; max-height: calc(100vh - 300px); overflow-y: auto; }
+.kanban-list { display: grid; align-content: start; gap: 8px; padding: 0 8px 10px; flex: 1; min-height: 0; overflow-y: auto; }
 .kanban-card { display: block; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-control); padding: 10px 12px; color: var(--ink); text-decoration: none; box-shadow: var(--shadow-card); cursor: grab; }
 .kanban-card:hover { border-color: var(--brand); }
 .kanban-card.is-urgent { border-left: 3px solid var(--status-critical); }
