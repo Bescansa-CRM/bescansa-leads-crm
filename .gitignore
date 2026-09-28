@@ -1,0 +1,8 @@
+data-private/
+*.xlsx
+.env*
+node_modules/
+.next/
+node_modules/
+*.tsbuildinfo
+next-env.d.ts

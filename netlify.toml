@@ -1,0 +1,23 @@
+# Landing estática de Estudio Bescansa. Publicar la carpeta `landing` en Netlify (Publish directory: landing).
+[build]
+  publish = "landing"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    # Ajustar connect-src con la URL real del CRM (apiUrl en config.js). Los dominios de Meta, Google y Turnstile solo se usan si la persona acepta cookies.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://connect.facebook.net https://www.googletagmanager.com https://challenges.cloudflare.com; connect-src 'self' https://*.estudiobescansa.com https://www.facebook.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src https://challenges.cloudflare.com; form-action 'self'; base-uri 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

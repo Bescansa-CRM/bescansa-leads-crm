@@ -1,0 +1,21 @@
+/* Tipografía de marca: Jost (títulos, cifras, navegación) + Montserrat (texto).
+   Licencia SIL OFL. Ajustá la ruta url() si movés la carpeta fonts/. */
+@font-face {
+  font-family: "Jost";
+  src: url("/fonts/jost-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --font-display: "Jost", Arial, sans-serif;
+  --font-body: "Montserrat", Arial, sans-serif;
+}
